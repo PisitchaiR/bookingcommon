@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider  = "prisma-client-py"
+  interface = "asyncio"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String?
+  studentId String?   @map("student_id")
+  password  String
+  reserve   Reserve[]
+}
+
+model Reserve {
+  id        Int      @id @default(autoincrement())
+  reserver  User?    @relation(fields: [uid], references: [id])
+  uid       Int?
+  createdAt DateTime @default(now())
+  table     String
+  num       Int
+}
