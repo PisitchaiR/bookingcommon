@@ -1,9 +1,10 @@
-import { Layout } from "../component";
+import { Layout, Nav } from "../component";
 
 const Success = () => {
-  return;
-  <Layout title="จองสำเร็จ">
-    
-  </Layout>;
+  return (
+    <Layout title="จองสำเร็จ">
+      <Nav />
+    </Layout>
+  );
 };
 export default Success;

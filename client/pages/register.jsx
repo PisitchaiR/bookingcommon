@@ -1,12 +1,15 @@
 import { Layout } from "../component";
-import { TextField, Box } from "@mui/material";
+import { TextField, Box, Alert } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { setCookie } from "cookies-next";
 
 const Register = () => {
   const router = useRouter();
+  const [alert, setAlert] = useState("");
 
   const {
     register,
@@ -25,10 +28,10 @@ const Register = () => {
       if (data.password != data.confirmPassword) throw { message: "password is not match" };
       delete data.confirmPassword;
       const res = await axios.post(`http://127.0.0.1:8000/register`, data);
-      localStorage.setItem("user", JSON.stringify(res.data));
+      setCookie("user", JSON.stringify(res.data));
       router.push("/");
     } catch (error) {
-      console.log(error.response.data.message);
+      setAlert(error.response?.data?.message || error.message);
     }
   };
   return (
@@ -62,6 +65,7 @@ const Register = () => {
             <div className="w-full flex flex-col gap-y-2">
               <TextField
                 color={errors.email ? "error" : "neutral"}
+                type="email"
                 label="Email"
                 variant="outlined"
                 {...register("email", { required: "จำเป็นต้องระบุรหัสผ่าน" })}
@@ -88,6 +92,11 @@ const Register = () => {
               />
               <Error name="confirmPassword" />
             </div>
+            {alert && (
+              <Alert severity="error" className="mb-4" id="error">
+                {alert}
+              </Alert>
+            )}
           </section>
           <button className=" bg-green-500 px-10 mx-auto py-3 border-none rounded-full text-white mt-10">สมัครสมาชิก</button>
         </form>

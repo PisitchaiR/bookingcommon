@@ -7,17 +7,17 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Tooltip from "@mui/material/Tooltip";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import { deleteCookie } from "cookies-next";
 
 function ResponsiveAppBar() {
   const [name, setName] = useState("");
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    setName(user.name);
-  }, []);
+  const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    deleteCookie("user");
+    router.push("/login");
   };
 
   return (

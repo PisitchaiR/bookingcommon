@@ -1,12 +1,15 @@
-import { Layout } from "../component";
-import { TextField, Box } from "@mui/material";
+import { TextField, Box, Alert } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/router";
+import { Layout } from "../component";
+import { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
-import { useRouter } from "next/router";
 
 const Login = () => {
   const router = useRouter();
+  const [alert, setAlert] = useState("");
 
   const {
     register,
@@ -24,12 +27,14 @@ const Login = () => {
     try {
       const res = await axios.post(`http://127.0.0.1:8000/login`, data);
       console.log(res.data);
-      localStorage.setItem("user", JSON.stringify(res.data));
+      setCookie("user", JSON.stringify(res.data));
       router.push("/");
     } catch (error) {
-      console.log(error.response?.data?.message || error);
+      console.log(errors);
+      setAlert(error.response?.data?.message || error.message);
     }
   };
+
   return (
     <Layout title="register">
       <div className="h-screen w-full flex flex-col items-center justify-between border border-black py-10 px-10">
@@ -59,6 +64,11 @@ const Login = () => {
               />
               <Error name="password" />
             </div>
+            {alert && (
+              <Alert severity="error" className="mb-4" id="error">
+                {alert}
+              </Alert>
+            )}
           </section>
           <button className=" bg-green-500 px-10 mx-auto py-3 border-none rounded-full text-white mt-10">เข้าสู่ระบบ</button>
         </form>
