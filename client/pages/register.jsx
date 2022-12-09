@@ -1,4 +1,4 @@
-import { Layout } from "../component";
+import { Layout } from "../components";
 import { TextField, Box, Alert } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";

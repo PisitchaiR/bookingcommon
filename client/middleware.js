@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function middleware(req, res) {
-  if (req.nextUrl.pathname === "/") {
+  if (req.nextUrl.pathname !== "/login" || req.nextUrl.pathname !== "/register") {
     const res = NextResponse.next();
     const data = req.cookies.get("user");
     if (!data) {
@@ -22,5 +22,5 @@ export async function middleware(req, res) {
 }
 
 export const config = {
-  matcher: ["/", "/login"],
+  matcher: ["/", "/login", "/register"],
 };

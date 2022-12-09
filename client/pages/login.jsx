@@ -2,7 +2,7 @@ import { TextField, Box, Alert } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/router";
-import { Layout } from "../component";
+import { Layout } from "../components";
 import { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
@@ -26,7 +26,6 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       const res = await axios.post(`http://127.0.0.1:8000/login`, data);
-      console.log(res.data);
       setCookie("user", JSON.stringify(res.data));
       router.push("/");
     } catch (error) {

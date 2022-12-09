@@ -4,6 +4,8 @@ from fastapi import FastAPI, status, Response
 from pydantic import BaseModel
 from prisma import Prisma
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime
+from prisma.models import Reserve
 
 prisma = Prisma(auto_register=True)
 app = FastAPI()
@@ -44,8 +46,9 @@ class login(BaseModel):
 
 
 class reservation(BaseModel):
-    table_name: str
-    num_person: str
+    table: str
+    num: str
+    time: str
 
 
 @app.get("/user")
@@ -106,8 +109,9 @@ async def create_reservation(uid: int, data: reservation):
     reservation = await prisma.reserve.create(
         data={
             'uid': uid,
-            "table": data.table_name,
-            "num": data.num_person
+            "table": data.table,
+            "time": int(data.time),
+            "num": int(data.num)
         }
     )
 
@@ -116,7 +120,7 @@ async def create_reservation(uid: int, data: reservation):
 
 @app.get("/reservation/{uid}")
 async def get_reservation(uid: int):
-    user_reservation = await prisma.user.find_many(
+    user_reservation = await prisma.user.find_first(
         where={
             "id": uid
         },
@@ -125,3 +129,26 @@ async def get_reservation(uid: int):
         },
     )
     return user_reservation
+
+
+@app.delete("/reservation/{reserveId}")
+async def delete_reservation(reserveId: int):
+    delete = await prisma.reserve.delete(
+        where={
+            "id": reserveId
+        },
+    )
+    print(delete)
+    return {
+        "message": "success"
+    }
+
+
+@app.get("/reservation")
+async def get_all_reservation():
+    reservation = await prisma.reserve.find_many(
+        include={
+            "reserver": True
+        }
+    )
+    return reservation

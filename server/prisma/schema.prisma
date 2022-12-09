@@ -24,7 +24,8 @@ model Reserve {
   id        Int      @id @default(autoincrement())
   reserver  User?    @relation(fields: [uid], references: [id])
   uid       Int?
-  createdAt DateTime @default(now())
-  table     String
-  num       Int
+  createdAt DateTime @default(now()) @map("created_at")
+  table     String?
+  num       Int?
+  time      Int?
 }

@@ -9,11 +9,17 @@ import Tooltip from "@mui/material/Tooltip";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { deleteCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 
 function ResponsiveAppBar() {
   const [name, setName] = useState("");
+  const [studentId, setStudentId] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    setName(JSON.parse(getCookie("user")).name);
+    setStudentId(JSON.parse(getCookie("user")).studentId);
+  }, []);
 
   const handleLogout = () => {
     deleteCookie("user");
@@ -36,11 +42,10 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            {name}
+            {name} - {studentId}
           </Typography>
 
           <Typography
-            variant="h5"
             noWrap
             component="a"
             href=""
@@ -52,7 +57,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            {name}
+            {name} - {studentId}
           </Typography>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -60,7 +65,6 @@ function ResponsiveAppBar() {
               <IconButton onClick={handleLogout} sx={{ p: 0 }}>
                 <Typography textAlign="center" className="text-white flex items-center">
                   <LogoutIcon />
-                  logout
                 </Typography>
               </IconButton>
             </Tooltip>
