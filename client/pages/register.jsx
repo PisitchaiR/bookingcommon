@@ -35,7 +35,7 @@ const Register = () => {
     }
   };
   return (
-    <Layout title="register">
+    <Layout title="ลงทะเบียน">
       <div className="h-screen w-full flex flex-col items-center justify-between border border-black py-10 px-10">
         <header>
           <h1 className="text-5xl">
